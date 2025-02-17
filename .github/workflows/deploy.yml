@@ -1,0 +1,44 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.x"
+
+      - name: Install dependencies and build Flutter
+        run: |
+          cd flutter_game
+          flutter pub get
+          flutter build web --base-href /cane-client/flutter/
+
+      - name: Deploy GitHub page for flutter
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: flutter_game/build/web
+          branch: gh-page
+          target-folder: flutter
+
+      - name: Deploy GitHub page for flutter
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: unity/build/
+          branch: gh-page
+          target-folder: unity

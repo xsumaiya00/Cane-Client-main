@@ -1,0 +1,9 @@
+flutter_game/
+unity/
+assets/
+static/
+components/ui
+metro.config.js
+dist/
+android/
+utils/api/

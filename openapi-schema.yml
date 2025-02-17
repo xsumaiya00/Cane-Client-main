@@ -1,0 +1,1344 @@
+openapi: 3.0.3
+info:
+  title: ""
+  version: 0.0.0
+paths:
+  /api/activities/:
+    get:
+      operationId: activities_list
+      tags:
+        - activities
+      security:
+        - tokenAuth: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Activity"
+          description: ""
+    post:
+      operationId: activities_create
+      tags:
+        - activities
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Activity"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Activity"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/Activity"
+        required: true
+      security:
+        - tokenAuth: []
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Activity"
+          description: ""
+  /api/activities/{id}/:
+    get:
+      operationId: activities_retrieve
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: A unique integer value identifying this activity.
+          required: true
+      tags:
+        - activities
+      security:
+        - tokenAuth: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Activity"
+          description: ""
+    put:
+      operationId: activities_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: A unique integer value identifying this activity.
+          required: true
+      tags:
+        - activities
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Activity"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Activity"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/Activity"
+        required: true
+      security:
+        - tokenAuth: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Activity"
+          description: ""
+    patch:
+      operationId: activities_partial_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: A unique integer value identifying this activity.
+          required: true
+      tags:
+        - activities
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchedActivity"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/PatchedActivity"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/PatchedActivity"
+      security:
+        - tokenAuth: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Activity"
+          description: ""
+    delete:
+      operationId: activities_destroy
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: A unique integer value identifying this activity.
+          required: true
+      tags:
+        - activities
+      security:
+        - tokenAuth: []
+      responses:
+        "204":
+          description: No response body
+  /api/activities/weekly-activities/:
+    get:
+      operationId: activities_weekly_activities_retrieve
+      tags:
+        - activities
+      security:
+        - tokenAuth: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Activity"
+          description: ""
+  /api/activities/weekly-stats/:
+    get:
+      operationId: activities_weekly_stats_retrieve
+      tags:
+        - activities
+      security:
+        - tokenAuth: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Activity"
+          description: ""
+  /api/auth/login/:
+    post:
+      operationId: auth_login_create
+      description: |-
+        Check the credentials and return the REST Token
+        if the credentials are valid and authenticated.
+        Calls Django Auth login method to register User ID
+        in Django session framework
+
+        Accept the following POST parameters: username, password
+        Return the REST Framework Token Object's key.
+      tags:
+        - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Login"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Login"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/Login"
+        required: true
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Token"
+          description: ""
+  /api/auth/logout/:
+    post:
+      operationId: auth_logout_create
+      description: |-
+        Calls Django logout method and delete the Token object
+        assigned to the current User object.
+
+        Accepts/Returns nothing.
+      tags:
+        - auth
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RestAuthDetail"
+          description: ""
+  /api/auth/password/change/:
+    post:
+      operationId: auth_password_change_create
+      description: |-
+        Calls Django Auth SetPasswordForm save method.
+
+        Accepts the following POST parameters: new_password1, new_password2
+        Returns the success/fail message.
+      tags:
+        - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PasswordChange"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/PasswordChange"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/PasswordChange"
+        required: true
+      security:
+        - tokenAuth: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RestAuthDetail"
+          description: ""
+  /api/auth/password/reset/:
+    post:
+      operationId: auth_password_reset_create
+      description: |-
+        Calls Django Auth PasswordResetForm save method.
+
+        Accepts the following POST parameters: email
+        Returns the success/fail message.
+      tags:
+        - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PasswordReset"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/PasswordReset"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/PasswordReset"
+        required: true
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RestAuthDetail"
+          description: ""
+  /api/auth/password/reset/confirm/:
+    post:
+      operationId: auth_password_reset_confirm_create
+      description: |-
+        Password reset e-mail link is confirmed, therefore
+        this resets the user's password.
+
+        Accepts the following POST parameters: token, uid,
+            new_password1, new_password2
+        Returns the success/fail message.
+      tags:
+        - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PasswordResetConfirm"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/PasswordResetConfirm"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/PasswordResetConfirm"
+        required: true
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RestAuthDetail"
+          description: ""
+  /api/auth/registration/:
+    post:
+      operationId: auth_registration_create
+      tags:
+        - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Register"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Register"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/Register"
+        required: true
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Token"
+          description: ""
+  /api/auth/registration/resend-email/:
+    post:
+      operationId: auth_registration_resend_email_create
+      tags:
+        - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResendEmailVerification"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/ResendEmailVerification"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/ResendEmailVerification"
+        required: true
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RestAuthDetail"
+          description: ""
+  /api/auth/registration/verify-email/:
+    post:
+      operationId: auth_registration_verify_email_create
+      tags:
+        - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VerifyEmail"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/VerifyEmail"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/VerifyEmail"
+        required: true
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RestAuthDetail"
+          description: ""
+  /api/auth/user/:
+    get:
+      operationId: auth_user_retrieve
+      description: |-
+        Reads and updates UserModel fields
+        Accepts GET, PUT, PATCH methods.
+
+        Default accepted fields: username, first_name, last_name
+        Default display fields: pk, username, email, first_name, last_name
+        Read-only fields: pk, email
+
+        Returns UserModel fields.
+      tags:
+        - auth
+      security:
+        - tokenAuth: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDetails"
+          description: ""
+    put:
+      operationId: auth_user_update
+      description: |-
+        Reads and updates UserModel fields
+        Accepts GET, PUT, PATCH methods.
+
+        Default accepted fields: username, first_name, last_name
+        Default display fields: pk, username, email, first_name, last_name
+        Read-only fields: pk, email
+
+        Returns UserModel fields.
+      tags:
+        - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserDetails"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/UserDetails"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/UserDetails"
+        required: true
+      security:
+        - tokenAuth: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDetails"
+          description: ""
+    patch:
+      operationId: auth_user_partial_update
+      description: |-
+        Reads and updates UserModel fields
+        Accepts GET, PUT, PATCH methods.
+
+        Default accepted fields: username, first_name, last_name
+        Default display fields: pk, username, email, first_name, last_name
+        Read-only fields: pk, email
+
+        Returns UserModel fields.
+      tags:
+        - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchedUserDetails"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/PatchedUserDetails"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/PatchedUserDetails"
+      security:
+        - tokenAuth: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDetails"
+          description: ""
+  /api/modules/:
+    get:
+      operationId: modules_list
+      tags:
+        - modules
+      security:
+        - tokenAuth: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Module"
+          description: ""
+    post:
+      operationId: modules_create
+      tags:
+        - modules
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Module"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Module"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/Module"
+        required: true
+      security:
+        - tokenAuth: []
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Module"
+          description: ""
+  /api/modules/{id}/:
+    get:
+      operationId: modules_retrieve
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: A unique integer value identifying this module.
+          required: true
+      tags:
+        - modules
+      security:
+        - tokenAuth: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Module"
+          description: ""
+    put:
+      operationId: modules_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: A unique integer value identifying this module.
+          required: true
+      tags:
+        - modules
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Module"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/Module"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/Module"
+        required: true
+      security:
+        - tokenAuth: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Module"
+          description: ""
+    patch:
+      operationId: modules_partial_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: A unique integer value identifying this module.
+          required: true
+      tags:
+        - modules
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchedModule"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/PatchedModule"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/PatchedModule"
+      security:
+        - tokenAuth: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Module"
+          description: ""
+    delete:
+      operationId: modules_destroy
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: A unique integer value identifying this module.
+          required: true
+      tags:
+        - modules
+      security:
+        - tokenAuth: []
+      responses:
+        "204":
+          description: No response body
+  /api/modules/by-slug/:
+    get:
+      operationId: modules_by_slug_retrieve
+      tags:
+        - modules
+      security:
+        - tokenAuth: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Module"
+          description: ""
+  /api/predict/hrta:
+    post:
+      operationId: predict_hrta_create
+      tags:
+        - predict
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HRTPredictionRequest"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/HRTPredictionRequest"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/HRTPredictionRequest"
+        required: true
+      security:
+        - tokenAuth: []
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HRTPredictionRequest"
+          description: ""
+  /api/predict/hrtd:
+    post:
+      operationId: predict_hrtd_create
+      tags:
+        - predict
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HRTPredictionRequest"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/HRTPredictionRequest"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/HRTPredictionRequest"
+        required: true
+      security:
+        - tokenAuth: []
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HRTPredictionRequest"
+          description: ""
+  /api/predict/hrts:
+    post:
+      operationId: predict_hrts_create
+      tags:
+        - predict
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HRTPredictionRequest"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/HRTPredictionRequest"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/HRTPredictionRequest"
+        required: true
+      security:
+        - tokenAuth: []
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HRTPredictionRequest"
+          description: ""
+  /api/predict/ier:
+    post:
+      operationId: predict_ier_create
+      tags:
+        - predict
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IERPredictionRequest"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/IERPredictionRequest"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/IERPredictionRequest"
+        required: true
+      security:
+        - tokenAuth: []
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IERPredictionRequest"
+          description: ""
+  /api/predict/ser:
+    post:
+      operationId: predict_ser_create
+      tags:
+        - predict
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/SERPredictionRequest"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/SERPredictionRequest"
+        required: true
+      security:
+        - tokenAuth: []
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SERPredictionRequest"
+          description: ""
+  /api/predict/ter:
+    post:
+      operationId: predict_ter_create
+      tags:
+        - predict
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TERPredictionRequest"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/TERPredictionRequest"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/TERPredictionRequest"
+        required: true
+      security:
+        - tokenAuth: []
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TERPredictionRequest"
+          description: ""
+  /api/questions/:
+    get:
+      operationId: questions_list
+      tags:
+        - questions
+      security:
+        - tokenAuth: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Question"
+          description: ""
+    post:
+      operationId: questions_create
+      tags:
+        - questions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuestionCreateUpdate"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/QuestionCreateUpdate"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/QuestionCreateUpdate"
+        required: true
+      security:
+        - tokenAuth: []
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionCreateUpdate"
+          description: ""
+  /api/questions/{id}/:
+    get:
+      operationId: questions_retrieve
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: A unique integer value identifying this question.
+          required: true
+      tags:
+        - questions
+      security:
+        - tokenAuth: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Question"
+          description: ""
+    put:
+      operationId: questions_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: A unique integer value identifying this question.
+          required: true
+      tags:
+        - questions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuestionCreateUpdate"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/QuestionCreateUpdate"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/QuestionCreateUpdate"
+        required: true
+      security:
+        - tokenAuth: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionCreateUpdate"
+          description: ""
+    patch:
+      operationId: questions_partial_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: A unique integer value identifying this question.
+          required: true
+      tags:
+        - questions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PatchedQuestionCreateUpdate"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/PatchedQuestionCreateUpdate"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/PatchedQuestionCreateUpdate"
+      security:
+        - tokenAuth: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionCreateUpdate"
+          description: ""
+    delete:
+      operationId: questions_destroy
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: A unique integer value identifying this question.
+          required: true
+      tags:
+        - questions
+      security:
+        - tokenAuth: []
+      responses:
+        "204":
+          description: No response body
+  /api/questions/by-slug/:
+    get:
+      operationId: questions_by_slug_retrieve
+      tags:
+        - questions
+      security:
+        - tokenAuth: []
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Question"
+          description: ""
+  /api/save_activity:
+    post:
+      operationId: save_activity_create
+      tags:
+        - save_activity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BaseActivity"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/BaseActivity"
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/BaseActivity"
+        required: true
+      security:
+        - tokenAuth: []
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseActivity"
+          description: ""
+components:
+  schemas:
+    Activity:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: string
+          readOnly: true
+        module:
+          type: string
+          readOnly: true
+        timestamp:
+          type: string
+          format: date-time
+        result:
+          type: string
+        question:
+          type: integer
+      required:
+        - id
+        - module
+        - question
+        - result
+        - user
+    BaseActivity:
+      type: object
+      properties:
+        activities:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+      required:
+        - activities
+    HRTPredictionRequest:
+      type: object
+      properties:
+        base64_svc_data:
+          type: string
+          writeOnly: true
+        task_number:
+          type: integer
+          writeOnly: true
+      required:
+        - base64_svc_data
+        - task_number
+    IERPredictionRequest:
+      type: object
+      properties:
+        image_base64:
+          type: string
+          writeOnly: true
+      required:
+        - image_base64
+    Login:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+        - password
+    Module:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        slug:
+          type: string
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        title:
+          type: string
+          maxLength: 255
+        instructions:
+          type: string
+        scale:
+          nullable: true
+      required:
+        - id
+        - instructions
+        - slug
+        - title
+    PasswordChange:
+      type: object
+      properties:
+        new_password1:
+          type: string
+          maxLength: 128
+        new_password2:
+          type: string
+          maxLength: 128
+      required:
+        - new_password1
+        - new_password2
+    PasswordReset:
+      type: object
+      description: Serializer for requesting a password reset e-mail.
+      properties:
+        email:
+          type: string
+          format: email
+      required:
+        - email
+    PasswordResetConfirm:
+      type: object
+      description: Serializer for confirming a password reset attempt.
+      properties:
+        new_password1:
+          type: string
+          maxLength: 128
+        new_password2:
+          type: string
+          maxLength: 128
+        uid:
+          type: string
+        token:
+          type: string
+      required:
+        - new_password1
+        - new_password2
+        - token
+        - uid
+    PatchedActivity:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: string
+          readOnly: true
+        module:
+          type: string
+          readOnly: true
+        timestamp:
+          type: string
+          format: date-time
+        result:
+          type: string
+        question:
+          type: integer
+    PatchedModule:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        slug:
+          type: string
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        title:
+          type: string
+          maxLength: 255
+        instructions:
+          type: string
+        scale:
+          nullable: true
+    PatchedQuestionCreateUpdate:
+      type: object
+      properties:
+        module:
+          type: integer
+        title:
+          type: string
+          maxLength: 255
+    PatchedUserDetails:
+      type: object
+      description: User model w/o password
+      properties:
+        pk:
+          type: integer
+          readOnly: true
+          title: ID
+        username:
+          type: string
+          description:
+            Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          readOnly: true
+          title: Email address
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+    Question:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        module:
+          allOf:
+            - $ref: "#/components/schemas/Module"
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        created_by:
+          type: integer
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+        - created_at
+        - id
+        - module
+        - title
+        - updated_at
+    QuestionCreateUpdate:
+      type: object
+      properties:
+        module:
+          type: integer
+        title:
+          type: string
+          maxLength: 255
+      required:
+        - module
+        - title
+    Register:
+      type: object
+      properties:
+        username:
+          type: string
+          maxLength: 150
+          minLength: 1
+        email:
+          type: string
+          format: email
+        password1:
+          type: string
+          writeOnly: true
+        password2:
+          type: string
+          writeOnly: true
+      required:
+        - email
+        - password1
+        - password2
+        - username
+    ResendEmailVerification:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+      required:
+        - email
+    RestAuthDetail:
+      type: object
+      properties:
+        detail:
+          type: string
+          readOnly: true
+      required:
+        - detail
+    SERPredictionRequest:
+      type: object
+      properties:
+        file:
+          type: string
+          format: uri
+      required:
+        - file
+    TERPredictionRequest:
+      type: object
+      properties:
+        model_version:
+          type: string
+        context:
+          type: string
+        sentence:
+          type: string
+        labels:
+          type: array
+          items:
+            type: string
+      required:
+        - context
+        - labels
+        - model_version
+        - sentence
+    Token:
+      type: object
+      description: Serializer for Token model.
+      properties:
+        key:
+          type: string
+          maxLength: 40
+      required:
+        - key
+    UserDetails:
+      type: object
+      description: User model w/o password
+      properties:
+        pk:
+          type: integer
+          readOnly: true
+          title: ID
+        username:
+          type: string
+          description:
+            Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          readOnly: true
+          title: Email address
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+      required:
+        - email
+        - pk
+        - username
+    VerifyEmail:
+      type: object
+      properties:
+        key:
+          type: string
+          writeOnly: true
+      required:
+        - key
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"

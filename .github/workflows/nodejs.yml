@@ -1,0 +1,55 @@
+name: Deploy Node.js (Expo)
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  deploy-node:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run style check
+        run: npx prettier --check "**/*.{js,ts,tsx,css,json,md}"
+
+      - name: Run lint check
+        run: npx expo lint
+
+      - name: Export Expo project
+        run: npx expo export -p web
+
+      - name: Deploy dist branch
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          mv dist ../dist-temp
+
+          git checkout dist || git checkout -b dist
+
+          git rm -rf .
+          git clean -fd
+
+          mv ../dist-temp/* .
+          rmdir ../dist-temp
+
+          git add .
+          git commit -m "chore: deploy web export from main branch" || echo "No changes to commit"
+          git push -f origin dist

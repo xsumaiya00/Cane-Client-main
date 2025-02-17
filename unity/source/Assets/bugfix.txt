@@ -1,0 +1,4 @@
+1. on restarted level after slider ends it just resets and 
+doesnt pop up the level end window
+
+2. reasoning game, when restarts the game time stays the same
