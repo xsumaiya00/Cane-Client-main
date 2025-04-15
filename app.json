@@ -14,15 +14,17 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.jbkdfkl.caneclient"
+      "bundleIdentifier": "com.dev.caneclient"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.jbkdfkl.caneclient",
-      "permissions": ["android.permission.CAMERA"]
+      "package": "com.dev.caneclient",
+      "permissions": [
+        "android.permission.CAMERA"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -31,14 +33,6 @@
     },
     "experiments": {
       "typedRoutes": true
-    },
-    "extra": {
-      "router": {
-        "origin": false
-      },
-      "eas": {
-        "projectId": "7d6782e4-00f0-4f13-bae1-9c648f81af72"
-      }
     },
     "plugins": [
       "expo-router",
@@ -52,6 +46,14 @@
         }
       ]
     ],
-    "owner": "jbkdfkl"
+    "owner": "dev.akash",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "67500b6f-0448-485b-baec-43f7a79a00b3"
+      }
+    }
   }
 }

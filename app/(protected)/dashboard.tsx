@@ -129,7 +129,7 @@ export default function Dashboard() {
         ),
         androidOnly: true,
         category: "ear",
-        isAvailable: Platform.OS === "android",
+        isAvailable: true,
       },
       {
         title: "Color sequence game",
@@ -183,15 +183,6 @@ export default function Dashboard() {
         category: "questionnaires",
         isAvailable: true,
       },
-      // {
-      //   title: "Depression, Anxiety Stress Scale",
-      //   module: "DAS",
-      //   link: "/questionnaires/[id]",
-      //   id: "das",
-      //   icon: () => <MessageCircleQuestion size={24} color="black" />,
-      //   category: "questionnaires",
-      //   isAvailable: true,
-      // },
     ],
     [],
   );
@@ -337,7 +328,36 @@ export default function Dashboard() {
     );
   };
 
+  const renderSignalsSection = () => {
+    const brainModules = availableLinks.filter(
+      (link) => link.category === "brain"
+    );
+    const earModules = availableLinks.filter(
+      (link) => link.category === "ear"
+    );
+
+    return (
+      <>
+        <Heading className="mt-8 mb-4 text-heading text-2xl">
+          Signal Detection
+        </Heading>
+        <Grid
+          className="gap-5"
+          _extra={{
+            className:
+              "grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2",
+          }}
+        >
+          {brainModules.map(renderCard)}
+          {earModules.map(renderCard)}
+        </Grid>
+      </>
+    );
+  };
+
   const renderSection = (category: ModulesT["category"], title: string) => {
+    if (category === "brain" || category === "ear") return null;
+    
     const categoryModules = availableLinks.filter(
       (link) => link.category === category,
     );
@@ -369,9 +389,7 @@ export default function Dashboard() {
         {renderSection("emotion", "Emotion Detection")}
         {renderSection("cognitive", "Cognitive skills")}
         {renderSection("questionnaires", "Questionnaires")}
-        {renderSection("brain", "Brain Signals")}
-        {renderSection("ear", "Ear Signals")} 
-        {/* important */}
+        {renderSignalsSection()}
       </Card>
     </Wrapper>
   );
