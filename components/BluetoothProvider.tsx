@@ -1,14 +1,20 @@
-import React, { createContext, useEffect, useState } from "react";
+// Updated BluetoothProvider.tsx
+import React, { createContext, useEffect, useState, useContext } from "react";
 import { View, Text } from "react-native";
 
-export const BluetoothContext = createContext<any>(null);
+interface BluetoothContextProps {
+  connected: boolean;
+  setConnected: (status: boolean) => void;
+}
+
+export const BluetoothContext = createContext<BluetoothContextProps | null>(null);
 
 export const BluetoothProvider = ({ children }: { children: React.ReactNode }) => {
   const [connected, setConnected] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      fetch("http://10.0.2.2:8000/status")  
+      fetch("http://100.64.218.145:8000/status")
         .then((res) => res.json())
         .then((data) => {
           setConnected(data.connected);
@@ -18,21 +24,16 @@ export const BluetoothProvider = ({ children }: { children: React.ReactNode }) =
           console.log("Status server unreachable");
           setConnected(false);
         });
-    }, 3000); // poll every 3 seconds
+    }, 3000);
 
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <BluetoothContext.Provider value={{ connected }}>
+    <BluetoothContext.Provider value={{ connected, setConnected }}>
       {children}
-
-      {/* Optional: Display connection status on screen */}
-      <View style={{ padding: 10, alignItems: "center" }}>
-        <Text style={{ fontWeight: "bold", fontSize: 16 }}>
-          {connected ? "✅ EEG Device Connected" : "❌ EEG Device Not Connected"}
-        </Text>
-      </View>
     </BluetoothContext.Provider>
   );
 };
+
+export const useBluetooth = () => useContext(BluetoothContext);
